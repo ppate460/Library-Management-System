@@ -1,0 +1,137 @@
+﻿-- Librarian (ssn, salary, name, email)
+create table Librarian(
+        ssn int primary key,
+        salary int,
+        name varchar,
+        email varchar
+);
+
+
+-- Client (email, name)
+create table Client (
+        email varchar(50) primary key,
+        name varchar(50)
+);
+
+
+-- Client-CreditCard (email, creditcardnumber, expirationdate, cvv)
+create table Client_CreditCard (
+        email varchar(50),
+        creditcardnumber varchar(20),  
+        expirationdate date,
+        cvv int check(cvv < 1000),
+        primary key (email, creditcardnumber, expirationdate, cvv)
+);
+
+
+-- Address (address_id, street-streetnumber, street-streetname, street-apt#, zip, city, state)
+create table Address (
+        address_id int primary key,
+        street_streetnumber int,
+        street_streetname varchar(50),
+        street_aptnum varchar(10),
+        zip int,
+        city varchar(20),
+        state varchar(10)
+);
+
+
+-- Client-Address (email, address_id)
+create table Client_Address (
+        email varchar(50),
+        address_id int,
+        primary key (email, address_id)
+);
+
+
+-- CreditCard-PaymentAddress (address_id, creditcardnumber, expirationdate, cvv)
+create table Credit_Card_PaymentAddress (
+        address_id int,
+        creditcardnumber int,
+        expirationdate varchar(10),
+        cvv int,
+        primary key (address_id, creditcardnumber, expirationdate, cvv)
+);
+
+
+-- Document-has-a-Publisher (document_id, publisher_id)
+create table Document_has_a_publisher (
+        document_id int,
+        publisher_id int,
+        primary key (document_id, publisher_id)
+);
+
+
+-- Publishers (publisher_id, name) 
+create table Publishers (
+        publisher_id int primary key,
+        name varchar(50)
+);
+
+
+-- Document (document_id, year, title, publisher_id, type, numcopies)
+create table Document (
+        document_id int primary key,
+        year int,
+        title varchar(50),
+        publisher_id int,
+        type varchar(10),
+        numcopies int,
+        foreign key (publisher_id) references Publishers
+);
+
+
+-- Books (document_id,  isbn, edition)
+create table Books(
+        document_id int,        
+        isbn varchar(16),
+        edition varchar(256),
+        primary key (document_id)
+);
+
+
+-- Magazines (document_id, isbn, name, month)
+create table Magazines(
+        document_id int,        
+        isbn varchar(16),
+        name varchar(256),
+        primary key (document_id)
+);
+
+
+-- Journals (document_id, name, issue, number)
+create table Journals(
+        document_id int,        
+        issue int,
+        name varchar(256),
+        number int,
+        primary key (document_id)
+);
+
+
+-- Document-Authors (document_id, authorid)
+create table Document_Authors (
+        document_id int,
+        authorid int,
+        primary key (document_id, authorid)
+);
+
+
+-- Authors (authorid, name)
+create table Authors (
+        authorid int primary key,
+        name varchar(50)
+);
+
+
+-- Check-Out (checkoutid, email, document_id, date, numchecked)
+create table Check_Out (
+        checkoutid int,
+        email varchar(50),
+        document_id int,
+        date date,
+        numchecked int,
+        primary key (checkoutid, email, document_id, date, numchecked),
+        foreign key (document_id) references Document,
+        foreign key (email) references Client
+);
